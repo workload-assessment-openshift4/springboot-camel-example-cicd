@@ -1,0 +1,20 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "springboot-camel-example-chart.fullname" . }}
+  labels:
+    {{- include "springboot-camel-example-chart.labels" . | nindent 4 }}
+spec:
+  path: /
+  to:
+    kind: Service
+    name: {{ include "springboot-camel-example-chart.fullname" . }}
+  {{- with .Values.route.host }}
+  host: {{ . }}
+  {{- end }}
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+{{- end }}
