@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: springboot-camel-example-deploy-
+spec:
+  params:
+    - name: TARGET_NAMESPACE
+      value: springboot-camel-example-dev
+    - name: ENVIRONMENT
+      value: dev
+  pipelineRef:
+    name: springboot-camel-example-deploy
+  serviceAccountName: deploy-bot
+  timeout: 1h0m0s
+  workspaces:
+    - name: workspace
+      volumeClaimTemplate: 
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 500Mi
