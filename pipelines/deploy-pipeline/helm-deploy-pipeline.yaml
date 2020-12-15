@@ -14,7 +14,7 @@ spec:
   - name: GIT_REVISION
     type: string
     description: revision to be used from repo of the code for deployment
-    default: "main"
+    default: "master"
   # helm variables
   - name: TARGET_NAMESPACE
     description: Namespace where to deploy the application
