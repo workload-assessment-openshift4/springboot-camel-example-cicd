@@ -69,6 +69,6 @@ spec:
     - name: overwrite_values
       value: $(params.HELM_OVERWRITE_VALUES)
     - name: values_file
-      value: ../values-$(params.ENVIRONMENT).yaml
+      value: values-$(params.ENVIRONMENT).yaml
     runAfter:
     - fetch-repository
