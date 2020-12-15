@@ -1,0 +1,74 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: springboot-camel-example-deploy
+spec:
+  workspaces:
+  - name: workspace
+  params:
+  # git variables
+  - name: GIT_URL
+    type: string
+    description: url of the git repo for the code of deployment
+    default: "https://github.com/workload-assessment-openshift4/springboot-camel-example-cicd"
+  - name: GIT_REVISION
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: "main"
+  # helm variables
+  - name: TARGET_NAMESPACE
+    description: Namespace where to deploy the application
+    default: springboot-camel-example-$(params.ENVIRONMENT)
+  - name: HELM_RELEASE_NAME
+    type: string
+    description: The helm release name
+    default: "springboot-camel-example"
+  - name: HELM_CHART_DIR
+    type: string
+    description: Directory where Chart.yaml resides
+    default: "helm-charts/springboot-camel-example-chart"
+  - name: HELM_OVERWRITE_VALUES
+    type: string
+    description: 'Specify the values you want to overwrite, comma separated: autoscaling.enabled=true,replicas=1'
+    default: ""
+  - name: ENVIRONMENT
+    type: string
+    description: 'Which values file to use: dev, qa'
+    default: ""
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: workspace
+    params:
+    - name: url
+      value: $(params.GIT_URL)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.GIT_REVISION)
+  - name: helm-deployment
+    taskRef:
+      name: helm-upgrade-from-source-2
+      kind: ClusterTask
+    workspaces:
+    - name: source
+      workspace: workspace
+    params:
+    - name: release_namespace
+      value: $(params.TARGET_NAMESPACE)
+    - name: release_name
+      value: $(params.HELM_RELEASE_NAME)
+    - name: charts_dir
+      value: $(params.HELM_CHART_DIR)
+    - name: overwrite_values
+      value: $(params.HELM_OVERWRITE_VALUES)
+    - name: values_file
+      value: ../values-$(params.ENVIRONMENT).yaml
+    runAfter:
+    - fetch-repository
