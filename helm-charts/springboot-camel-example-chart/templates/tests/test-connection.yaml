@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "springboot-camel-example-chart.fullname" . }}-test-connection"
+  labels:
+    {{- include "springboot-camel-example-chart.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "springboot-camel-example-chart.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
