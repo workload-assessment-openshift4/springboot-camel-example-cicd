@@ -1,0 +1,47 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: springboot-example-build-
+spec:
+  params:
+    - name: APP_NAME
+      value: springboot-example
+    - name: APP_GIT_REPO
+      value: https://github.com/workload-assessment-openshift4/springboot-camel-example.git
+    - name: CICD_GIT_REPO
+      value: https://github.com/workload-assessment-openshift4/springboot-camel-example-cicd
+    - name: GIT_REVISION
+      value: main
+    - name: CICD_GIT_REVISION
+      value: master
+    - name: IMAGE_NAME
+      value: >-
+        nexus-container-registry-nexus.apps.cluster-3bcb.sandbox1869.opentlc.com/tekton-springboot/springboot-example:latest
+    - name: CONTEXT_DIR
+      value: ''
+    - name: DOCKERFILE_DIR
+      value: container-image/Dockerfile
+    - name: BUILD_CONTEXT
+      value: target/
+  pipelineRef:
+    name: springboot-example-build
+  serviceAccountName: pipeline
+  serviceAccountNames:
+  - taskName: fetch-app-repository
+    serviceAccountName: build-bot
+  - taskName: fetch-cicd-repository
+    serviceAccountName: build-bot
+  - taskName: build
+    serviceAccountName: build-bot
+  timeout: 1h0m0s
+  workspaces:
+    - name: workspace
+      volumeClaimTemplate: 
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 500Mi
+    - name: maven-settings
+      emptyDir: {}
