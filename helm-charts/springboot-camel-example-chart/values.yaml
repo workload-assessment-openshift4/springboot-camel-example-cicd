@@ -1,5 +1,5 @@
-# nameOverride: "basic-servlet-example"
-fullnameOverride: basic-servlet-example
+# nameOverride: "springboot-camel-example"
+fullnameOverride: springboot-camel-example
 
 image:
   repository: nexus-container-registry-nexus.apps.cluster-3bcb.sandbox1869.opentlc.com/fuse7/fuse-java-openshift
