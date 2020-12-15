@@ -5,11 +5,20 @@ metadata:
   labels:
     {{- include "springboot-camel-example-chart.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: 8080
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: 8080-tcp
+    - port: 8778
+      targetPort: 8778
+      protocol: TCP
+      name: 8778-tcp
+    - port: 9779
+      targetPort: 9779
+      protocol: TCP
+      name: 9779-tcp
   selector:
     {{- include "springboot-camel-example-chart.selectorLabels" . | nindent 4 }}
+    

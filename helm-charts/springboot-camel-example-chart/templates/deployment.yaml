@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "springboot-camel-example-chart.labels" . | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-{{- end }}
   selector:
     matchLabels:
       {{- include "springboot-camel-example-chart.selectorLabels" . | nindent 6 }}
@@ -20,13 +18,16 @@ spec:
       labels:
         {{- include "springboot-camel-example-chart.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- if or .Values.imagePullSecrets .Values.imageCredentials }}
       imagePullSecrets:
+        {{- with .Values.imagePullSecrets }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.imageCredentials }}
+        - name: {{ .name }}
+        {{- end }}
       {{- end }}
       serviceAccountName: {{ include "springboot-camel-example-chart.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -35,27 +36,26 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - name: 8778-tcp
+              containerPort: 8778
+              protocol: TCP
+            - name: 9779-tcp
+              containerPort: 9779
+              protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "springboot-camel-example-chart.fullname" . }}
+                optional: true
+          volumeMounts:
+          - mountPath: /etc/configmaps/{{ include "springboot-camel-example-chart.fullname" . }}
+            name: volume-cm
+      volumes:
+        - name: volume-cm
+          configMap:
+            defaultMode: 420
+            name: {{ include "springboot-camel-example-chart.fullname" . }}-mount
+            optional: true
