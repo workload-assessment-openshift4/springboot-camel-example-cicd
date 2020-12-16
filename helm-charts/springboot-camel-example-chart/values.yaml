@@ -2,7 +2,7 @@
 fullnameOverride: springboot-camel-example
 
 image:
-  repository: nexus-container-registry-global-pull-nexus.apps.cluster-3bcb.sandbox1869.opentlc.com/fuse7/fuse-java-openshift
+  repository: nexus-container-registry-nexus.apps.cluster-3bcb.sandbox1869.opentlc.com/fuse7/fuse-java-openshift
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
