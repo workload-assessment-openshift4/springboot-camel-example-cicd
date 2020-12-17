@@ -10,7 +10,7 @@ spec:
     type: string
   - name: CICD_GIT_REPO
     type: string
-  - name: GIT_REVISION
+  - name: APP_GIT_REVISION
     type: string
   - name: CICD_GIT_REVISION
     type: string
@@ -28,7 +28,7 @@ spec:
     - name: url
       value: $(params.APP_GIT_REPO)
     - name: revision
-      value: $(params.GIT_REVISION)
+      value: $(params.APP_GIT_REVISION)
     - name: deleteExisting
       value: "true"
     - name: subdirectory
