@@ -1,0 +1,37 @@
+= Helm Deploy Pipeline
+
+== Install
+
+Create helm clustertask (only needs to do once since it'll be available for the whole cluster):
+[source, yaml]
+oc apply -f helm-upgrade-from-source.yaml
+
+Run the script in this directory:
+[source,]
+----
+./setup.sh
+----
+
+To run the pipeline:
+[source,]
+----
+oc create -f springboot-camel-example-deploy-run.yaml
+----
+
+== Setup Script Explained
+
+. Creates the service account that will associate the secrets with the pipeline tasks
+[source, yaml]
+oc apply -f serviceaccount.yaml
+
+. Creates the helm pipeline that will deploy the application
+[source, yaml]
+oc apply -f springboot-camel-example-deploy.yaml
+
+. Creates a namespace for the deployment
+[source, yaml]
+oc new-project springboot-camel-example-<environment>
+
+. Ensures that service account for the pipeline has access to the namespace where the app will be deployed
+[source, yaml]
+oc adm policy add-role-to-user -n springboot-camel-example-<environment> edit system:serviceaccount:$CURRENT_NAMSPACE:deploy-bot

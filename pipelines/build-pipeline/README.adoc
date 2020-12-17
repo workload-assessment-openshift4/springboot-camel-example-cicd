@@ -1,0 +1,38 @@
+= Maven-Dockerfile Build Pipeline
+
+This pipeline first fetches two repositories from private Gogs: the application repo and the CICD repo that has the Dockerfile. Then, it performs a maven build to generate the application `.war` file. Lastly, it utilizes the Buildah clustertask to perform a Dockerfile-build with the dockerfile in the CICD repository. The Dockerfile takes the Tomcat image from secured Nexus, and the final application image is pushed to Nexus. 
+
+== Steps Explained
+
+. Create maven clustertask (only needs to do once since it'll be available for the whole cluster)
+
+.. This uses a newer version of the maven Task that doesn't come with the Tekton installation
+[source, yaml]
+oc apply -f maven-task-2.yaml
+
+. Create the gogs secret
+[source, yaml]
+oc apply -f gogs-secret-basic-servlet.yaml
+
+. Create Nexus secret
+[source, yaml]
+oc apply -f nexus-secret.yaml
+
+. Create the service account that'll associate the secrets with the pipeline tasks
+[source, yaml]
+oc apply -f serviceaccount.yaml
+
+. Create the build pipeline
+[source, yaml]
+oc apply -f build-pipeline.yaml
+
+. Run the pipeline (make sure parameters are correct)
+[source, yaml]
+oc create -f build-pipeline-run.yaml
+
+== Script
+To run all the above commands (except PipelineRun):
+[source,]
+----
+./setup.sh
+----
