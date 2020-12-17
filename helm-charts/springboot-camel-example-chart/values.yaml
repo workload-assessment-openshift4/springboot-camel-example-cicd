@@ -39,7 +39,7 @@ resources: {}
 
 livenessProbe:
   enabled: true
-  handlerPath: /actuator/health
+  path: /actuator/health
   initialDelaySeconds: 60
   periodSeconds: 5
   timeoutSeconds: 10
@@ -47,7 +47,7 @@ livenessProbe:
   failureThreshold: 4
 readinessProbe:
   enabled: true
-  handlerPath: /actuator/health
+  path: /actuator/health
   initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 5
