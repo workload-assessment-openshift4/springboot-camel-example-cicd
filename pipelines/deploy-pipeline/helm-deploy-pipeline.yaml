@@ -61,7 +61,7 @@ spec:
       workspace: workspace
     params:
     - name: release_namespace
-      value: $(params.TARGET_NAMESPACE)-$(params.TARGET_NAMESPACE)
+      value: $(params.TARGET_NAMESPACE)-$(params.ENVIRONMENT)
     - name: release_name
       value: $(params.HELM_RELEASE_NAME)
     - name: charts_dir
