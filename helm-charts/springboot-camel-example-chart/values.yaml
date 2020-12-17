@@ -37,4 +37,21 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+livenessProbe:
+  enabled: true
+  handlerPath: /actuator/health
+  initialDelaySeconds: 60
+  periodSeconds: 5
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 4
+readinessProbe:
+  enabled: true
+  handlerPath: /actuator/health
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
 greeting: Say Hello

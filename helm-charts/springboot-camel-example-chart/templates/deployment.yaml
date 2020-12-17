@@ -44,11 +44,33 @@ spec:
             - name: 9779-tcp
               containerPort: 9779
               protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.handlerPath }}
+              port: http
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.handlerPath }}
+              port: http
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
            - name: spring.config.additional-location
-             value: file:/etc/configmaps/{{ include "springboot-camel-example-chart.fullname" . }}
+             value: file:/etc/configmaps/{{ include "springboot-camel-example-chart.fullname" . }}/
           envFrom:
             - configMapRef:
                 name: {{ include "springboot-camel-example-chart.fullname" . }}
