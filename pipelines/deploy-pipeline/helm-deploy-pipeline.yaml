@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: springboot-camel-example-deploy
+  name: springboot-camel-example-deploy-qa
 spec:
   workspaces:
   - name: workspace
@@ -14,11 +14,11 @@ spec:
   - name: GIT_REVISION
     type: string
     description: revision to be used from repo of the code for deployment
-    default: "master"
+    default: "test-qa-helm"
   # helm variables
   - name: TARGET_NAMESPACE
     description: Namespace where to deploy the application
-    default: springboot-camel-example-$(params.ENVIRONMENT)
+    default: springboot-camel-example-qa
   - name: HELM_RELEASE_NAME
     type: string
     description: The helm release name
