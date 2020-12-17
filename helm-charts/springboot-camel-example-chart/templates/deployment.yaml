@@ -17,7 +17,7 @@ spec:
     {{- end }}
       labels:
         {{- include "springboot-camel-example-chart.selectorLabels" . | nindent 8 }}
-        deploytime: {{ now | htmlDate }}
+        deploytime: {{ now | date "2006-01-02_15.04.05" }}
     spec:
       {{- if or .Values.imagePullSecrets .Values.imageCredentials }}
       imagePullSecrets:
