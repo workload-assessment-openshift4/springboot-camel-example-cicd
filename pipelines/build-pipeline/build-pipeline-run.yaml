@@ -10,7 +10,7 @@ spec:
       value: https://github.com/workload-assessment-openshift4/springboot-camel-example.git
     - name: CICD_GIT_REPO
       value: https://github.com/workload-assessment-openshift4/springboot-camel-example-cicd
-    - name: GIT_REVISION
+    - name: APP_GIT_REVISION
       value: main
     - name: CICD_GIT_REVISION
       value: master
@@ -27,10 +27,10 @@ spec:
     name: springboot-example-build
   serviceAccountName: pipeline
   serviceAccountNames:
-  - taskName: fetch-app-repository
-    serviceAccountName: build-bot
-  - taskName: fetch-cicd-repository
-    serviceAccountName: build-bot
+  # - taskName: fetch-app-repository
+  #   serviceAccountName: build-bot
+  # - taskName: fetch-cicd-repository
+  #   serviceAccountName: build-bot
   - taskName: build
     serviceAccountName: build-bot
   timeout: 1h0m0s
