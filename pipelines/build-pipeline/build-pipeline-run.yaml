@@ -25,14 +25,14 @@ spec:
       value: target/
   pipelineRef:
     name: springboot-example-build
-  serviceAccountName: pipeline
-  serviceAccountNames:
+  serviceAccountName: build-bot
+  # serviceAccountNames:
   # - taskName: fetch-app-repository
   #   serviceAccountName: build-bot
   # - taskName: fetch-cicd-repository
   #   serviceAccountName: build-bot
-  - taskName: build
-    serviceAccountName: build-bot
+  # - taskName: build
+  #   serviceAccountName: build-bot
   timeout: 1h0m0s
   workspaces:
     - name: workspace
