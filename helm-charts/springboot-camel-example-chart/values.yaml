@@ -1,4 +1,3 @@
-# nameOverride: "springboot-camel-example"
 fullnameOverride: springboot-camel-example
 
 image:
@@ -38,5 +37,4 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-config:
-  testenv: DEFAULT-value
+greeting: Say Hello
