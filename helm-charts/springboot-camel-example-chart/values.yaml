@@ -10,14 +10,8 @@ image:
 replicaCount: 1
 
 
-# imagePullSecrets: 
-#  - name: extra-test
-
-imageCredentials:
-  name: nexus-credentials
-  registry: nexus-container-registry-nexus.apps.cluster-3bcb.sandbox1869.opentlc.com
-  username: admin
-  password: admin123
+imagePullSecrets: 
+ - name: nexus-credentials
 
 serviceAccount:
   # Specifies whether a service account should be created
