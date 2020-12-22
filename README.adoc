@@ -25,6 +25,6 @@ The build pipeline will create the WAR file that is referenced in the Dockerfile
 
 There are two pipelines: build and deploy. 
 
-The build pipeline creates a WAR artifact via Maven. Buildah will then create a new image with the https://github.com/workload-assessment-openshift4/springboot-camel-example-cicd/tree/master/container-image[Dockerfile] and push it to a nexus image registry.
+The build pipeline creates an executable JAR artifact via Maven. Buildah will then create a new image with the https://github.com/workload-assessment-openshift4/springboot-camel-example-cicd/tree/master/container-image[Dockerfile] and push it to a nexus image registry.
 
 The deploy pipeline utilizes Helm to create all the necessary resources to run the application. It will use the image that was created by the build pipeline as the image for the deployed application.
